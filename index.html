@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LAZY RAG - 22x Faster Than Vector Databases | Document Retrieval</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="description" content="Proven 22x faster than Pinecone and Weaviate. Zero per-query cost. Perfect for structured documents like APIs, configs, and technical specs.">
+
+    <!-- SEO -->
+    <meta name="keywords" content="RAG, document retrieval, vector database alternative, fast RAG, structured documents, API documentation, Pinecone alternative, Weaviate alternative">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://lazyrag.one">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lazyrag.one">
+    <meta property="og:title" content="LAZY RAG - 22x Faster Than Vector Databases">
+    <meta property="og:description" content="Tested against $850M+ in market value. Zero per-query cost. Instant setup.">
+    <meta property="og:image" content="https://lazyrag.one/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="LAZY RAG - 22x Faster Document Retrieval">
+    <meta property="twitter:description" content="Proven faster than Pinecone ($750M) and Weaviate ($100M+)">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "LAZY RAG",
+        "description": "Document retrieval system that's 22x faster than leading vector databases like Pinecone and Weaviate. Zero per-query cost, instant setup.",
+        "url": "https://lazyrag.one",
+        "applicationCategory": "DeveloperTool",
+        "operatingSystem": "macOS, Linux, Windows",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "22x faster than Pinecone and Weaviate",
+            "Zero per-query cost vs $2 per 10K queries",
+            "Instant setup (0s ingestion)",
+            "Perfect for structured documents",
+            "Validated with real benchmarks"
+        ]
+    }
+    </script>
+
+    <style>
+        /* CSS Variables - Dual Experience: Academic (light) vs Marketing (dark) */
+        :root {
+            /* Light Mode = Academic Paper Style */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --accent: #0099CC;          /* Ice blue - credibility accent */
+            --accent-hover: #007AA3;    /* Darker ice */
+            --accent-dark: #006B8F;     /* Darkest ice */
+            --ice: #0099CC;             /* Ice blue for data highlights */
+            --ice-light: #33B5E5;       /* Light ice */
+            --ice-dark: #006B8F;        /* Dark ice */
+            --border: #ddd;
+            --code-bg: #f5f5f5;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode = Marketing/Emotional Mode - STEEL, FIRE & ICE */
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #d0d0d0;
+            --text-muted: #a0a0a0;
+            --accent: #FF6B35;          /* Fire orange */
+            --accent-hover: #FF8C42;    /* Lighter fire */
+            --accent-dark: #E55525;     /* Darker fire */
+            --ice: #00D4FF;             /* Ice blue - cyan */
+            --ice-light: #7FECFF;       /* Light ice */
+            --ice-dark: #0099CC;        /* Dark ice blue */
+            --steel: #2c3e50;           /* Blue steel */
+            --steel-light: #4a4a4a;     /* Light steel */
+            --steel-dark: #0a0a0a;      /* Dark steel/iron */
+            --border: #333333;
+            --code-bg: #262626;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        /* Dark mode: add ice→fire gradient to logo */
+        [data-theme="dark"] .logo {
+            background: linear-gradient(135deg, #00D4FF 0%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3)) drop-shadow(0 0 20px rgba(255, 107, 53, 0.3));
+        }
+
+        /* WolfejamGizmo - Signature half-moon theme toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .theme-toggle__gradient {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #FFF 50%, #121212 50%);
+            transition: transform 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .theme-toggle__gradient--dark {
+            transform: rotate(180deg);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 16px rgba(0, 255, 255, 0.3);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .theme-toggle:focus {
+            outline: 2px solid #00FFFF;
+            outline-offset: 2px;
+        }
+
+        .theme-toggle:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        .theme-toggle__tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .theme-toggle:hover .theme-toggle__tooltip {
+            opacity: 1;
+        }
+
+        .theme-toggle__tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid rgba(0, 0, 0, 0.9);
+        }
+
+        /* Accessibility - reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .theme-toggle,
+            .theme-toggle * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Hero Section - Clean in light, dramatic in dark */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dark mode: Add steel gradient and effects */
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg,
+                #4a4a4a 0%,
+                #2c3e50 20%,
+                #0a0a0a 50%,
+                #2c3e50 80%,
+                #4a4a4a 100%
+            );
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Steel sheen animation - dark mode only */
+        [data-theme="dark"] .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+            animation: steelSheen 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* Ice & Fire accent - dark mode only */
+        [data-theme="dark"] .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00D4FF 0%, #FF6B35 50%, #00D4FF 100%);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4), 0 0 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 6vw, 72px);
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dark mode: Ice→Fire gradient on title (old→new) */
+        [data-theme="dark"] .hero h1 {
+            background: linear-gradient(135deg, #00D4FF 0%, white 50%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 4px 15px rgba(0, 212, 255, 0.4)) drop-shadow(0 4px 15px rgba(255, 107, 53, 0.4));
+        }
+
+        .hero .tagline {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dark mode: Add effects to tagline */
+        [data-theme="dark"] .hero .tagline {
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero .tagline strong {
+            color: var(--accent);
+        }
+
+        /* Dark mode: Add ice→fire gradient to strong tags */
+        [data-theme="dark"] .hero .tagline strong {
+            background: linear-gradient(135deg, #00D4FF 0%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 20px rgba(255, 107, 53, 0.4));
+        }
+
+        .hero .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dark mode: Add glow to subtitle */
+        [data-theme="dark"] .hero .subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin: 48px 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Dark mode: Add ice→fire gradient and glow to stat numbers */
+        [data-theme="dark"] .stat-number {
+            background: linear-gradient(135deg, #00D4FF 0%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.3)) drop-shadow(0 0 25px rgba(255, 107, 53, 0.3));
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* Dark mode: White label with glow */
+        [data-theme="dark"] .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Validation Banner - Subtle in light, fire in dark */
+        .validation {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 80px;
+            border-top: 2px solid var(--ice);
+            border-bottom: 2px solid var(--ice);
+        }
+
+        /* Dark mode: Fire gradient banner */
+        [data-theme="dark"] .validation {
+            background: linear-gradient(90deg, #E55525 0%, #FF6B35 50%, #E55525 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        /* CTA Buttons */
+        .cta-container {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border: 1px solid var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #333333;
+            border-color: #333333;
+            transform: translateY(-2px);
+        }
+
+        /* Comparison Section - Clean academic in light, steel drama in dark */
+        .comparison {
+            padding: 120px 0;
+            background: var(--bg-primary);
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Dark mode: Add steel gradient and dramatic effects */
+        [data-theme="dark"] .comparison {
+            background: linear-gradient(135deg,
+                #4a4a4a 0%,
+                #2c3e50 20%,
+                #0a0a0a 50%,
+                #2c3e50 80%,
+                #4a4a4a 100%
+            );
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Steel sheen animation - dark mode only */
+        [data-theme="dark"] .comparison::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+            animation: steelSheen 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes steelSheen {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Ice & Fire accent - dark mode only */
+        [data-theme="dark"] .comparison::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00D4FF 0%, #FF6B35 50%, #00D4FF 100%);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4), 0 0 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .comparison .section-title {
+            color: var(--text-primary);
+            font-size: clamp(40px, 8vw, 80px);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+        }
+
+        /* Dark mode: Ice→Fire gradient on title (old way → new way) */
+        [data-theme="dark"] .comparison .section-title {
+            color: white;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            background: linear-gradient(135deg, #00D4FF 0%, white 50%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 40px rgba(255, 107, 53, 0.6));
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 64px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .comparison .section-subtitle {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 80px;
+        }
+
+        /* Dark mode: Add glow to comparison subtitle */
+        [data-theme="dark"] .comparison .section-subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .comparison .section-subtitle .highlight {
+            color: var(--accent);
+        }
+
+        /* Dark mode: Add glow to highlight */
+        [data-theme="dark"] .comparison .section-subtitle .highlight {
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 48px;
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .comparison-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 48px 40px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        /* Dark mode: Dramatic dark cards with glow */
+        [data-theme="dark"] .comparison-card {
+            background: rgba(20, 20, 20, 0.95) !important;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="dark"] .comparison-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .comparison-card.winner {
+            border-color: var(--accent);
+            border-width: 3px;
+            background: white;
+            position: relative;
+        }
+
+        .comparison-card.winner:hover {
+            transform: translateY(-6px);
+        }
+
+        /* Dark mode: FIRE glow on winner card */
+        [data-theme="dark"] .comparison-card.winner {
+            border-color: #FF6B35;
+            border-width: 5px;
+            background: linear-gradient(135deg, rgba(60, 20, 0, 0.98) 0%, rgba(40, 10, 0, 0.98) 100%);
+            box-shadow: 0 0 80px rgba(255, 107, 53, 0.8), 0 20px 60px rgba(0, 0, 0, 0.9);
+            transform: scale(1.05);
+        }
+
+        [data-theme="dark"] .comparison-card.winner:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 0 100px rgba(255, 107, 53, 1), 0 25px 80px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Pulsing fire glow - dark mode only */
+        [data-theme="dark"] .comparison-card.winner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #E55525 0%, #FF6B35 50%, #E55525 100%);
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 0 40px rgba(255, 107, 53, 1);
+            animation: pulseFire 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseFire {
+            0%, 100% { box-shadow: 0 0 40px rgba(255, 107, 53, 1); }
+            50% { box-shadow: 0 0 60px rgba(255, 107, 53, 1), 0 0 80px rgba(255, 107, 53, 0.5); }
+        }
+
+        .card-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        /* Dark mode: White text with shadow */
+        [data-theme="dark"] .card-title {
+            color: white !important;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .comparison-card.winner .card-title {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* Dark mode: FIRE gradient on winner title */
+        [data-theme="dark"] .comparison-card.winner .card-title {
+            background: linear-gradient(135deg, #FF8C42 0%, white 50%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(255, 107, 53, 1)) drop-shadow(0 0 40px rgba(255, 107, 53, 0.8));
+        }
+
+        .card-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-weight: 600;
+        }
+
+        /* Dark mode: Light gray subtitle */
+        [data-theme="dark"] .card-subtitle {
+            color: rgba(255, 255, 255, 0.7) !important;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .comparison-card.winner .card-subtitle {
+            font-size: 22px;
+        }
+
+        /* Dark mode: FIRE glow on winner subtitle */
+        [data-theme="dark"] .comparison-card.winner .card-subtitle {
+            color: #FF6B35;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            font-size: 18px;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        /* Dark mode: Light label with shadow */
+        [data-theme="dark"] .metric-label {
+            color: rgba(255, 255, 255, 0.8) !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .metric-value {
+            font-weight: 900;
+            font-size: 22px;
+            color: var(--text-primary);
+        }
+
+        /* Dark mode: White values */
+        [data-theme="dark"] .metric-value {
+            color: white !important;
+        }
+
+        .metric-value.good {
+            color: var(--accent);
+            font-weight: 900;
+            font-size: 28px;
+        }
+
+        /* Dark mode: FIRE glow on good values (winner card) */
+        [data-theme="dark"] .metric-value.good {
+            color: #FF6B35;
+            text-shadow: 0 0 25px rgba(255, 107, 53, 1);
+        }
+
+        .metric-value.bad {
+            color: #c0392b;
+        }
+
+        /* Dark mode: Red glow on bad values */
+        [data-theme="dark"] .metric-value.bad {
+            color: #ff6b6b;
+            text-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .feature {
+            text-align: left;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .feature h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .feature p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Benchmark Table */
+        .benchmark {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+        }
+
+        table {
+            width: 100%;
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-weight: 700;
+            background: var(--text-primary);
+            color: white;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Query column header - dark */
+        th:nth-child(1) {
+            background: #1a1a1a;
+            text-align: left;
+        }
+
+        /* Pinecone column header - light in light mode */
+        th:nth-child(2) {
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        /* Dark mode: Pinecone header dark like others */
+        [data-theme="dark"] th:nth-child(2) {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        /* Weaviate column header - dark */
+        th:nth-child(3) {
+            background: #1a1a1a;
+        }
+
+        /* LAZY RAG column header - ICE CYAN */
+        th:nth-child(4) {
+            background: var(--ice);
+            color: white;
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Speedup column header - FIRE ORANGE */
+        th:nth-child(5) {
+            background: var(--accent);
+            color: white;
+            font-weight: 900;
+        }
+
+        /* Dark mode: Fire orange header */
+        [data-theme="dark"] th:nth-child(5) {
+            background: #FF6B35;
+            color: white;
+            font-weight: 900;
+        }
+
+        /* Alternating row backgrounds */
+        tbody tr:nth-child(odd) {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--bg-primary);
+        }
+
+        /* Query column cells - left aligned */
+        tbody td:nth-child(1) {
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Pinecone column cells - subtle background */
+        tbody td:nth-child(2) {
+            background: rgba(0, 0, 0, 0.03);
+            font-weight: 600;
+        }
+
+        /* Weaviate column cells */
+        tbody td:nth-child(3) {
+            font-weight: 600;
+        }
+
+        /* LAZY RAG column cells - ICE CYAN glow */
+        tbody td:nth-child(4) {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 212, 255, 0.08) 100%);
+            color: var(--ice-dark);
+            font-weight: 900;
+            font-size: 18px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            border-left: 2px solid var(--ice);
+            border-right: 2px solid var(--ice);
+        }
+
+        /* Speedup column cells - fire tint */
+        tbody td:nth-child(5) {
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        /* Dark mode: Darker fire tint */
+        [data-theme="dark"] tbody td:nth-child(5) {
+            background: rgba(255, 107, 53, 0.08);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:last-child td:nth-child(4) {
+            border-bottom: 2px solid var(--ice);
+        }
+
+        tbody tr:hover {
+            background: rgba(0, 212, 255, 0.08);
+        }
+
+        tbody tr:hover td:nth-child(4) {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.25) 0%, rgba(0, 212, 255, 0.15) 100%);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .speedup {
+            font-weight: 900;
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        /* Dark mode: Fire glow on speedup values */
+        [data-theme="dark"] .speedup {
+            color: #FF6B35;
+            text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .theme-toggle {
+                bottom: 16px;
+                right: 16px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .hero {
+                padding: 80px 0 60px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .comparison {
+                padding: 60px 0;
+                min-height: auto;
+            }
+
+            .comparison .section-title {
+                font-size: clamp(32px, 10vw, 48px);
+                margin-bottom: 16px;
+            }
+
+            .comparison .section-subtitle {
+                font-size: 18px;
+                margin-bottom: 48px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .comparison-card {
+                padding: 32px 24px;
+            }
+
+            .comparison-card.winner {
+                transform: scale(1);
+            }
+
+            .comparison-card.winner:hover {
+                transform: translateY(-4px) scale(1.02);
+            }
+
+            .card-title {
+                font-size: 28px;
+            }
+
+            .comparison-card.winner .card-title {
+                font-size: 36px;
+            }
+
+            .card-subtitle {
+                font-size: 16px;
+            }
+
+            .metric {
+                padding: 16px 0;
+                font-size: 16px;
+            }
+
+            .metric-value {
+                font-size: 18px;
+            }
+
+            .metric-value.good {
+                font-size: 22px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">🔥❄️ LAZY RAG</a>
+        </nav>
+    </header>
+
+    <!-- WolfejamGizmo - Floating theme toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <div class="theme-toggle__gradient" id="themeGradient"></div>
+        <div class="theme-toggle__tooltip" id="themeTooltip">Dark Mode</div>
+    </button>
+
+    <main>
+        <section class="comparison">
+            <div class="container">
+                <h2 class="section-title">22X FASTER</h2>
+                <p class="section-subtitle">Than Pinecone <span class="highlight">($750M)</span> & Weaviate <span class="highlight">($100M+)</span> — The Industry Leaders</p>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <div class="card-title">Pinecone</div>
+                        <div class="card-subtitle">$750M Valuation</div>
+
+                        <div class="metric">
+                            <span class="metric-label">Avg Query Time</span>
+                            <span class="metric-value bad">425ms</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Ingestion Time</span>
+                            <span class="metric-value bad">47.6s</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Per-Query Cost</span>
+                            <span class="metric-value bad">~$0.0002</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">vs LAZY RAG</span>
+                            <span class="metric-value bad">⚠️ 21.6x SLOWER</span>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card">
+                        <div class="card-title">Weaviate</div>
+                        <div class="card-subtitle">$100M+ Valuation</div>
+
+                        <div class="metric">
+                            <span class="metric-label">Avg Query Time</span>
+                            <span class="metric-value bad">434ms</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Ingestion Time</span>
+                            <span class="metric-value bad">14.4s</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Per-Query Cost</span>
+                            <span class="metric-value bad">~$0.0002</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">vs LAZY RAG</span>
+                            <span class="metric-value bad">⚠️ 22.1x SLOWER</span>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card winner">
+                        <div class="card-title">LAZY RAG ❄️⚡</div>
+                        <div class="card-subtitle">🏆 THE WINNER</div>
+
+                        <div class="metric">
+                            <span class="metric-label">Avg Query Time</span>
+                            <span class="metric-value good">19.7ms</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Ingestion Time</span>
+                            <span class="metric-value good">0s (instant)</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Per-Query Cost</span>
+                            <span class="metric-value good">$0</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Performance</span>
+                            <span class="metric-value good">🚀 22X FASTER</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA in comparison section -->
+                <div class="cta-container" style="margin-top: 80px;">
+                    <a href="#benchmark" class="btn btn-primary" style="font-size: 20px; padding: 16px 48px;">See Full Benchmarks</a>
+                    <a href="mailto:contact@lazyrag.one" class="btn btn-secondary" style="font-size: 20px; padding: 16px 48px; background: white; color: var(--steel-dark); border: 2px solid white;">Contact Us</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="validation">
+            ✅ Tested head-to-head against Pinecone ($750M) and Weaviate ($100M+) | All claims validated with real data
+        </div>
+
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Perfect For Structured Documents</h2>
+
+                <div class="features-grid">
+                    <div class="feature">
+                        <span class="feature-icon">📚</span>
+                        <h3>API Documentation</h3>
+                        <p>Retrieve exact endpoint specs in milliseconds. Perfect for developer tools and API assistants.</p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature-icon">⚙️</span>
+                        <h3>Configuration Files</h3>
+                        <p>Navigate complex configs (Kubernetes, Terraform) with deterministic precision.</p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature-icon">📄</span>
+                        <h3>Technical Specs</h3>
+                        <p>Extract specific sections from large technical documents instantly.</p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature-icon">💼</span>
+                        <h3>Resume Parsing</h3>
+                        <p>Extract work experience, education, skills in 2-4ms. 200x faster than vector search.</p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature-icon">🔍</span>
+                        <h3>Code Analysis</h3>
+                        <p>Index and query code repositories with zero per-query cost.</p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature-icon">📊</span>
+                        <h3>Knowledge Bases</h3>
+                        <p>Enterprise policies, procedures, and specs with infinite query scaling.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="benchmark" id="benchmark">
+            <div class="container">
+                <h2 class="section-title">Real Benchmark Data</h2>
+                <p class="section-subtitle">Tested with real documents and queries. All results are reproducible.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Query</th>
+                            <th>Pinecone</th>
+                            <th>Weaviate</th>
+                            <th>LAZY RAG</th>
+                            <th>Speedup</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"work experience"</td>
+                            <td>411ms</td>
+                            <td>463ms</td>
+                            <td>2ms</td>
+                            <td class="speedup">205x</td>
+                        </tr>
+                        <tr>
+                            <td>"skills"</td>
+                            <td>400ms</td>
+                            <td>—</td>
+                            <td>2ms</td>
+                            <td class="speedup">200x</td>
+                        </tr>
+                        <tr>
+                            <td>"contact info"</td>
+                            <td>451ms</td>
+                            <td>386ms</td>
+                            <td>4ms</td>
+                            <td class="speedup">128x</td>
+                        </tr>
+                        <tr>
+                            <td>"education"</td>
+                            <td>333ms</td>
+                            <td>561ms</td>
+                            <td>9ms</td>
+                            <td class="speedup">80x</td>
+                        </tr>
+                        <tr>
+                            <td>"impressionism"</td>
+                            <td>489ms</td>
+                            <td>—</td>
+                            <td>10ms</td>
+                            <td class="speedup">48x</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="benchmark-comparison.html" class="btn btn-primary">View Full Results</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 LAZY RAG. Built with Claude (Anthropic). Tested against $850M+ market value.</p>
+            <p style="margin-top: 8px;">Perfect for structured documents like APIs, configurations, and specifications.</p>
+        </div>
+    </footer>
+
+    <script>
+        // WolfejamGizmo theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeGradient = document.getElementById('themeGradient');
+        const themeTooltip = document.getElementById('themeTooltip');
+        const html = document.documentElement;
+
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        updateThemeGizmo(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeGizmo(newTheme);
+        });
+
+        function updateThemeGizmo(theme) {
+            if (theme === 'dark') {
+                themeGradient.classList.add('theme-toggle__gradient--dark');
+                themeTooltip.textContent = 'Light Mode';
+            } else {
+                themeGradient.classList.remove('theme-toggle__gradient--dark');
+                themeTooltip.textContent = 'Dark Mode';
+            }
+        }
+    </script>
+</body>
+</html>
