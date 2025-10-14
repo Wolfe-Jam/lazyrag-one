@@ -19,11 +19,15 @@ Then visit: `http://localhost:8080`
 ## 📁 Project Structure
 
 ```
-lazyrag-website/
-├── index.html           # Main landing page (Steel, Fire & Ice theme)
-├── assets/              # Images, icons, og-image.png
-├── docs/                # Additional documentation
-└── README.md            # This file
+lazyrag-one/
+├── index.html                  # Main landing page (Steel, Fire & Ice theme)
+├── og-image.png                # Social media preview (1200x640)
+├── favicon.png                 # Browser icon (256x256)
+├── robots.txt                  # SEO crawling instructions
+├── sitemap.xml                 # SEO sitemap
+├── og-image-generator.html     # Tool to generate og-image
+├── favicon-generator.html      # Tool to generate favicon
+└── README.md                   # This file
 ```
 
 ## 🎨 Theme
@@ -37,11 +41,14 @@ lazyrag-website/
 ## ✨ Features
 
 - ✅ WolfejamGizmo signature theme toggle (half-moon design)
-- ✅ Full-page comparison hero (22x faster messaging)
+- ✅ Full-page comparison hero with ice→fire branding (❄️🔥)
+- ✅ Enterprise pricing comparison (10M queries/month economics)
+- ✅ Three-card comparison layout with perfect alignment
 - ✅ Real benchmark data table with alternating columns
+- ✅ Email copy functionality with visual feedback
 - ✅ Fully responsive (mobile-first)
 - ✅ Accessible (ARIA, keyboard navigation, reduced motion)
-- ✅ SEO optimized (Open Graph, structured data)
+- ✅ SEO optimized (Open Graph, structured data, robots.txt, sitemap)
 - ✅ Zero dependencies (pure HTML/CSS/JS)
 
 ## 🌐 Domains
@@ -59,7 +66,7 @@ Both secured at Namecheap.
 npm i -g vercel
 
 # Deploy
-cd /Users/wolfejam/RAG/lazyrag-website
+cd /Users/wolfejam/RAG/lazyrag-one
 vercel
 
 # Connect custom domain at vercel.com dashboard
@@ -71,7 +78,7 @@ vercel
 npm i -g netlify-cli
 
 # Deploy
-cd /Users/wolfejam/RAG/lazyrag-website
+cd /Users/wolfejam/RAG/lazyrag-one
 netlify deploy --prod
 
 # Connect custom domain at netlify.app dashboard
@@ -105,13 +112,13 @@ Add Google Analytics or Plausible script before `</head>` tag.
 
 ## 📝 TODO
 
-- [ ] Create og-image.png (1200x630px with LAZY RAG branding)
-- [ ] Add favicon.ico
-- [ ] Set up analytics
-- [ ] Configure DNS at Namecheap
-- [ ] Deploy to production
+- [x] Create og-image.png (1200x630px with LAZY RAG branding) ✅
+- [x] Add favicon.png ✅
+- [x] Set up Google Analytics (G-KT1Z96ZSH1) ✅
+- [ ] Configure DNS at Namecheap (point to deployment)
+- [ ] Deploy to production (Vercel/Netlify)
 - [ ] Test on mobile devices
-- [ ] Create GitHub public repo (for buyers to inspect)
+- [ ] Optional: Update og-image with new tagline
 
 ## 🏎️ Built With
 
