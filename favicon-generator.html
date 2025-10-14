@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAZY RAG - Favicon Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: system-ui;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .favicon-large {
+            width: 512px;
+            height: 512px;
+            background: linear-gradient(135deg, #2c3e50 0%, #0a0a0a 50%, #2c3e50 100%);
+            position: relative;
+            overflow: hidden;
+            border-radius: 80px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.8);
+            margin: 0 auto 40px;
+        }
+
+        /* Top accent - Ice to Fire */
+        .favicon-large::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: linear-gradient(90deg, #00D4FF 0%, #FF6B35 100%);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 30px rgba(255, 107, 53, 0.8);
+        }
+
+        /* Bottom accent */
+        .favicon-large::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: linear-gradient(90deg, #00D4FF 0%, #FF6B35 100%);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 30px rgba(255, 107, 53, 0.8);
+        }
+
+        .favicon-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .emoji {
+            font-size: 240px;
+            line-height: 1;
+            filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 40px rgba(255, 107, 53, 0.5));
+        }
+
+        .letter {
+            font-size: 280px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00D4FF 0%, white 50%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 50px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 50px rgba(255, 107, 53, 0.6));
+            line-height: 1;
+            letter-spacing: -10px;
+        }
+
+        .sizes {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .size-box {
+            text-align: center;
+        }
+
+        .favicon-small {
+            background: linear-gradient(135deg, #2c3e50 0%, #0a0a0a 50%, #2c3e50 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+        }
+
+        .size-32 {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+        }
+
+        .size-32::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00D4FF 0%, #FF6B35 100%);
+        }
+
+        .size-32 .emoji {
+            font-size: 24px;
+            filter: none;
+        }
+
+        .size-180 {
+            width: 180px;
+            height: 180px;
+            border-radius: 30px;
+        }
+
+        .size-180::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #00D4FF 0%, #FF6B35 100%);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6), 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+
+        .size-180 .emoji {
+            font-size: 120px;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 20px rgba(255, 107, 53, 0.5));
+        }
+
+        .size-label {
+            color: #00D4FF;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .instructions {
+            margin-top: 60px;
+            color: white;
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .instructions strong {
+            color: #FF6B35;
+        }
+
+        .instructions code {
+            background: #2c3e50;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #00D4FF;
+            font-family: monospace;
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #00D4FF 0%, #FF6B35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LAZY RAG Favicon</h1>
+
+        <div class="favicon-large">
+            <div class="favicon-content">
+                <div class="emoji">❄️🔥</div>
+            </div>
+        </div>
+
+        <div class="sizes">
+            <div class="size-box">
+                <div class="favicon-small size-32">
+                    <div class="emoji">❄️🔥</div>
+                </div>
+                <div class="size-label">32x32 (Browser Tab)</div>
+            </div>
+
+            <div class="size-box">
+                <div class="favicon-small size-180">
+                    <div class="emoji">❄️🔥</div>
+                </div>
+                <div class="size-label">180x180 (Apple Touch)</div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <strong>INSTRUCTIONS:</strong><br><br>
+
+            <strong>1. Save the 512x512 favicon (top):</strong><br>
+            • Screenshot the large square above<br>
+            • Save as: <code>favicon.png</code> or <code>favicon.ico</code><br>
+            • Place in: <code>/Users/wolfejam/RAG/lazyrag-website/</code><br><br>
+
+            <strong>2. Generate additional sizes (optional):</strong><br>
+            • Use https://realfavicongenerator.net/ to auto-generate all sizes<br>
+            • Upload your 512x512 favicon<br>
+            • Download package with: favicon.ico, apple-touch-icon.png, etc.<br><br>
+
+            <strong>3. Or use the simple approach:</strong><br>
+            • Just save the 512x512 as <code>favicon.png</code><br>
+            • Browsers will auto-resize it<br><br>
+
+            <strong>TIP:</strong> The fire/ice emoji combo is simple, recognizable, and matches your brand perfectly! 🔥❄️
+        </div>
+    </div>
+</body>
+</html>
