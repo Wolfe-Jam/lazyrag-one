@@ -77,8 +77,8 @@
         /* CSS Variables - Dual Experience: Academic (light) vs Marketing (dark) */
         :root {
             /* Light Mode = Academic Paper Style */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f8f8;
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #efefef;
             --text-primary: #000000;
             --text-secondary: #333333;
             --text-muted: #666666;
@@ -146,7 +146,7 @@
 
         nav {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
 
@@ -157,13 +157,18 @@
             text-decoration: none;
         }
 
-        /* Dark mode: add ice→fire gradient to logo */
+        /* Dark mode: white text, no gradient */
         [data-theme="dark"] .logo {
-            background: linear-gradient(135deg, #00D4FF 0%, #FF6B35 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3)) drop-shadow(0 0 20px rgba(255, 107, 53, 0.3));
+            color: white;
+        }
+
+        /* Dark mode: colored sections */
+        [data-theme="dark"] .logo span:nth-child(1) {
+            color: #00D4FF;
+        }
+
+        [data-theme="dark"] .logo span:nth-child(3) {
+            color: #FF6B35;
         }
 
         /* WolfejamGizmo - Signature half-moon theme toggle */
@@ -614,7 +619,7 @@
             border: 2px solid var(--border);
             border-radius: 20px;
             padding: 48px 40px;
-            text-align: center;
+            text-align: left;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 2px 8px var(--shadow);
         }
@@ -687,6 +692,9 @@
             margin-bottom: 12px;
             color: var(--text-primary);
             letter-spacing: 0.02em;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
         }
 
         /* Dark mode: White text with shadow */
@@ -700,13 +708,10 @@
             margin-bottom: 16px;
         }
 
-        /* Dark mode: FIRE gradient on winner title */
+        /* Dark mode: Bright white text on winner title */
         [data-theme="dark"] .comparison-card.winner .card-title {
-            background: linear-gradient(135deg, #FF8C42 0%, white 50%, #FF6B35 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 0 30px rgba(255, 107, 53, 1)) drop-shadow(0 0 40px rgba(255, 107, 53, 0.8));
+            color: white !important;
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.8), 0 2px 10px rgba(0, 0, 0, 0.8);
         }
 
         .card-subtitle {
@@ -714,6 +719,9 @@
             color: var(--text-secondary);
             margin-bottom: 32px;
             font-weight: 600;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
         }
 
         /* Dark mode: Light gray subtitle */
@@ -724,6 +732,7 @@
 
         .comparison-card.winner .card-subtitle {
             font-size: 22px;
+            justify-content: center;
         }
 
         /* Dark mode: FIRE glow on winner subtitle */
@@ -744,9 +753,14 @@
             border-bottom: none;
         }
 
+        .metric-value {
+            text-align: right;
+        }
+
         .metric-label {
             font-weight: 700;
             color: var(--text-secondary);
+            white-space: nowrap;
         }
 
         /* Dark mode: Light label with shadow */
@@ -886,7 +900,7 @@
 
         /* Speedup column header - FIRE ORANGE */
         th:nth-child(5) {
-            background: var(--accent);
+            background: #FF6B35;
             color: white;
             font-weight: 900;
         }
@@ -1072,7 +1086,11 @@
 <body>
     <header>
         <nav class="container">
-            <a href="#" class="logo">❄️🔥 LAZY RAG</a>
+            <a href="#" class="logo" style="display: flex; gap: 40px; align-items: center; word-spacing: normal;">
+                <span style="white-space: nowrap; word-spacing: normal;">❄️ Vectors, Vaporized.</span>
+                <span style="white-space: nowrap; letter-spacing: -0.5px; word-spacing: normal; padding-right: 10px;">🔥 LAZY RAG | 22X FASTER</span>
+                <span style="white-space: nowrap; word-spacing: normal;">☑️ Costs, Crushed.</span>
+            </a>
         </nav>
     </header>
 
@@ -1106,8 +1124,8 @@
                             <span class="metric-value bad">~$0.0002</span>
                         </div>
                         <div class="metric">
-                            <span class="metric-label">vs LAZY RAG</span>
-                            <span class="metric-value bad">⚠️ 21.6x SLOWER</span>
+                            <span class="metric-label">Performance</span>
+                            <span class="metric-value bad">~425ms queries</span>
                         </div>
                     </div>
 
@@ -1128,8 +1146,8 @@
                             <span class="metric-value bad">~$0.0002</span>
                         </div>
                         <div class="metric">
-                            <span class="metric-label">vs LAZY RAG</span>
-                            <span class="metric-value bad">⚠️ 22.1x SLOWER</span>
+                            <span class="metric-label">Performance</span>
+                            <span class="metric-value bad">~434ms queries</span>
                         </div>
                     </div>
 
@@ -1151,7 +1169,7 @@
                         </div>
                         <div class="metric">
                             <span class="metric-label">Performance</span>
-                            <span class="metric-value good">🔥 22X FASTER</span>
+                            <span class="metric-value good">🔥 Sub-20ms queries</span>
                         </div>
                     </div>
                 </div>
@@ -1212,6 +1230,59 @@
             </div>
         </section>
 
+        <!-- Enterprise Pricing Comparison -->
+        <section class="pricing" style="padding: 80px 0; background: var(--bg-primary);">
+            <div class="container">
+                <h2 class="section-title" style="font-size: 48px; margin-bottom: 16px;">Enterprise Pricing Model</h2>
+                <p class="section-subtitle" style="font-size: 20px; margin-bottom: 64px;">How vector databases charge vs. LAZY RAG at 10M queries/month</p>
+
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <table style="border-collapse: collapse;" class="pricing-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Provider</th>
+                                <th>Base Cost</th>
+                                <th>Query Fees</th>
+                                <th>Total/Month</th>
+                                <th style="background: #FF6B35; color: white; font-weight: 900;">Annual Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 700; color: var(--text-primary);">Pinecone</td>
+                                <td>$70</td>
+                                <td>$2,000</td>
+                                <td>$2,070</td>
+                                <td style="background: rgba(255, 107, 53, 0.05);">$24,840</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700; color: var(--text-primary);">Weaviate</td>
+                                <td>$100</td>
+                                <td>$2,000</td>
+                                <td>$2,100</td>
+                                <td style="background: rgba(255, 107, 53, 0.05);">$25,200</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700; color: var(--text-primary);">LAZY RAG</td>
+                                <td>$TBA</td>
+                                <td>$0</td>
+                                <td>$TBA</td>
+                                <td style="background: rgba(255, 107, 53, 0.05);">$TBA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="text-align: center; margin-top: 48px; padding: 32px; background: rgba(255, 107, 53, 0.05); border-radius: 12px; border: 2px solid rgba(255, 107, 53, 0.2);">
+                        <div style="font-size: 18px; color: var(--text-secondary); margin-bottom: 12px;">🔥 <strong>Performance + Economics</strong></div>
+                        <div style="font-size: 16px; color: var(--text-muted); line-height: 1.8;">
+                            <strong>Industry-leading speed.</strong> Zero per-query fees. <strong>Enterprise licensing</strong> that scales with your business, not your usage.<br>
+                            <strong>Contact us</strong> to discuss pricing tailored to your deployment.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="benchmark" id="benchmark">
             <div class="container">
                 <h2 class="section-title">Real Benchmark Data</h2>
@@ -1267,7 +1338,7 @@
                 </table>
 
                 <div style="text-align: center; margin-top: 40px;">
-                    <a href="mailto:contact@lazyrag.one" class="btn btn-primary">Request Full Benchmark Report</a>
+                    <a href="mailto:contact@lazyrag.one" class="btn btn-primary" id="benchmarkBtn" onclick="copyEmail(event, 'contact@lazyrag.one', this)">Request Full Benchmark Report</a>
                 </div>
             </div>
         </section>
@@ -1275,8 +1346,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 LAZY RAG. Built with Claude (Anthropic). Tested against $850M+ market value.</p>
-            <p style="margin-top: 8px;">Perfect for structured documents like APIs, configurations, and specifications.</p>
+            <p>&copy; 2025 LAZY RAG 🏎️✨<a href="https://wolfejam.dev" style="color: inherit; text-decoration: none; font-weight: 600;">wolfejam.dev</a> | Built with Claude (Anthropic).</p>
         </div>
     </footer>
 
@@ -1308,6 +1378,25 @@
                 themeGradient.classList.remove('theme-toggle__gradient--dark');
                 themeTooltip.textContent = 'Dark Mode';
             }
+        }
+
+        // Copy email to clipboard and show feedback
+        function copyEmail(event, email, button) {
+            event.preventDefault();
+
+            navigator.clipboard.writeText(email).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#4CAF50';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            }).catch(() => {
+                // Fallback: still open mailto if copy fails
+                window.location.href = `mailto:${email}`;
+            });
         }
     </script>
 </body>
